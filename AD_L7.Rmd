@@ -322,5 +322,7 @@ res <- residuals(Linear_2)
 
 shapiro.test(res)
 
+mean(res)
+
 ```
-Os resultados do teste apontam um p-valor de 0.76, levando a n?o rejeitar a hip?tese nula de que os dados testados n?o est?o normalmente distribu?dos.
+Os resultados do teste apontam um p-valor de 0.76, levando a n?o rejeitar a hip?tese nula de que os dados testados n?o est?o normalmente distribu?dos. A média dos resíduos obtida foi de 4.27. Dado os gráficos analisados e teste realizado, é possível concluir que há homocedasticidade no modelo.
