@@ -4,7 +4,7 @@ author: "Antonio Fernandes"
 date: "28 de maio de 2019"
 output: pdf_document
 ---
-\renewcommand{\contentsname}{Conte?do}
+\renewcommand{\contentsname}{Conteúdo}
   
 \tableofcontents  
 
@@ -12,17 +12,17 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Apresenta??o
+# Apresentação
 
-Este documento apresenta as respostas da lista de exerc?cios 7 da disciplina de An?lise de dados.
+Este documento apresenta as respostas da lista de exercícios 7 da disciplina de Análise de dados.
 
-O link est? dispon?vel no GitHub: https://github.com/alvesat/AD_7
+O link está dispon?vel no GitHub: https://github.com/alvesat/AD_7
 
-A lista envolve a execu??o de diversos modelos de regress?o linear multivariada envolvendo um banco de dados espec?ficos.
+A lista envolve a execução de diversos modelos de regressão linear multivariada envolvendo um banco de dados específicos.
 
-## Quest?o 1
+## Questão 1
 
-O primeiro passo para responder a quest?o ? abrir o banco de dados contendo os dados necess?rios. ? importante verificar que os dados est?o no formato *.dta*, que ? o formato relacionado ao *software* Stata. Devido a isso, teremos que abrir o pacote `haven` e executar o comando para abrir o banco.
+O primeiro passo para responder a questão é abrir o banco de dados contendo os dados necessários. É importante verificar que os dados estão no formato *.dta*, que é o formato relacionado ao *software* Stata. Devido a isso, teremos que abrir o pacote `haven` e executar o comando para abrir o banco.
 
 ```{r}
 library(haven)
@@ -31,9 +31,9 @@ fair <- read_dta("~/Dados/Listas/AD_7/DATA_L7/fair.dta")
 
 ```
 
-### a) An?lise descritiva de todas as vari?veis da base de dados
+### a) Análise descritiva de todas as variáveis da base de dados
 
-Vamos verificar o nome das vari?veis presentes no banco
+Vamos verificar o nome das variáveis presentes no banco
 
 ```{r}
 
@@ -41,9 +41,9 @@ names(fair)
 
 ```
 
-Podemos observar que o banco apresenta 9 vari?veis:  *Year, Vote, Party, Person, Duration, War, Growth, Inflation* e *Good news*.
+Podemos observar que o banco apresenta 9 variáveis:  *Year, Vote, Party, Person, Duration, War, Growth, Inflation* e *Good news*.
 
-Um outro passo envolvendo o processo de descri??o das vari?veis ? identificar a estrutura de cada vari?vel:
+Um outro passo envolvendo o processo de descrição das variáveis é identificar a estrutura de cada variável:
 
 ```{r}
 
@@ -51,11 +51,11 @@ str(fair)
 
 ```
 
-? poss?vel identificar que todas as vari?veis presentes no banco s?o n?mericas e que o banco possui 32 observa??es. Agora vamos fazer uma an?lise descritiva de cada vari?vel:
+É possível identificar que todas as variáveis presentes no banco são númericas e que o banco possui 32 observações. Agora vamos fazer uma análise descritiva de cada variável:
 
 #### Year
 
-A vari?vel ano apresenta os anos relacionados as outras vari?veis. Por meio do comando  `fivenum`, podemos obter um sum?rio da vari?vel (valores min?mos, 1? quartil, mediana, 3? quartil e valor m?ximo). No caso dessa vari?vel, o importante ? verificarmos o come?o da an?lise e o m?ximo. 
+A variável ano apresenta os anos relacionados as outras variáveis. Por meio do comando  `fivenum`, podemos obter um sumário da variável (valores minímos, 1º quartil, mediana, 3º quartil e valor máximo). No caso dessa variável, o importante é verificarmos o começo da análise e o máximo. 
 
 ```{r}
 
@@ -63,7 +63,7 @@ fivenum(fair$YEAR)
 
 ```
 
-Em rela??o a vari?vel Year, percebemos que o primeiro ano do banco ? 1880 e o ano final do banco ? 2004. 
+Em relação a variável Year, percebemos que o primeiro ano do banco é 1880 e o ano final do banco é 2004. 
 
 #### Vote
 
@@ -73,7 +73,7 @@ fivenum(fair$VOTE)
 
 ```
 
-Em rela??o a vari?vel vote, a vari?vel representa a porcentagem de votos recebidas pelo partido do incumbente. Observando os valores obtidos do comando fivenum, o valor m?nimo da vari?vel foi de 36.12, o 1? quartil ? de 49.27, a mediana ? de 52.03, o 3? ? de 56.38 e o valor m?ximo ? de 62.46. Podemos analisar a vari?vel vote por meio de um histograma:
+Em relação a variável vote, ela representa a porcentagem de votos recebidas pelo partido do incumbente. Observando os valores obtidos do comando fivenum, o valor mínimo da variável foi de 36.12, o 1º quartil é de 49.27, a mediana é de 52.03, o 3º quartil é de 56.38 e o valor máximo é de 62.46. Podemos analisar a variável vote por meio de um histograma:
 
 ```{r}
 
@@ -81,11 +81,11 @@ hist(fair$VOTE)
 
 ```
 
-Com o histograma, verificamos que os valores est?o mais concentrados entre 45 e 55, ou seja, no centro da distribui??o.
+Com o histograma, verificamos que os valores estão mais concentrados entre 45 e 55, ou seja, no centro da distribuição.
 
 #### Party
 
-A vari?vel party ? bin?ria, apresentando como valores -1 e 1. 
+A variável party é binária, apresentando como valores -1 e 1. 
 
 ```{r}
 
@@ -93,11 +93,11 @@ ftable(fair$PARTY)
 
 ```
 
-Com o comando `ftable`, podemos fazer uma tabela de frequ?ncia da vari?vel party e identificar que das 32 observa??es do banco, 18 s?o do valor -1 e 14 s?o do valor 1.
+Com o comando `ftable`, podemos fazer uma tabela de frequência da variável party e identificar que das 32 observações do banco, 18 são do valor -1 e 14 são do valor 1.
 
 #### Person
 
-A vari?vel person tamb?m ? bin?ria, apresentando como valores 1 e 0.
+A variável person também é binária, apresentando como valores 1 e 0.
 
 ```{r}
 
@@ -105,18 +105,18 @@ ftable(fair$PERSON)
 
 ```
 
-O resultado mostra que 13 observa??es apresentam o valor 0 e 19 observa??es apresentam o valor 1.
+O resultado mostra que 13 observações apresentam o valor 0 e 19 observações apresentam o valor 1.
 
 #### Duration
 
-A vari?vel duration apresenta os valores de 2 a 0. Com o comando `fivenum`? poss?vel obter uma an?lise descritiva das vari?vel:
+A variável duration apresenta os valores de 2 a 0. Com o comando `fivenum`é possível obter uma análise descritiva da varivel:
 
 ```{r}
 
 fivenum(fair$DURATION)
 
 ```
-O valor m?nimo e do primeiro quartil ? 0, a mediana ? 1, o 3? quartil ? 1.25 e o valor m?ximo da distribui??o ? 2.
+O valor mínimo e do primeiro quartil é 0, a mediana é 1, o 3º quartil é 1.25 e o valor máximo da distribuiço é 2.
 
 
 ```{r}
@@ -124,85 +124,85 @@ O valor m?nimo e do primeiro quartil ? 0, a mediana ? 1, o 3? quartil ? 1.25 e o
 hist(fair$DURATION)
 
 ```
-Pelo histograma, vemos que a maior parte das observ??es s?o 0 e 1 (25)
+Pelo histograma, vemos que a maior parte das observções são 0 e 1 (25)
 
 #### War
 
-A vari?vel war ? uma vari?vel bin?ria que ? melhor observada por meio do comando `ftable`:
+A variável war é uma variável binária que é melhor observada por meio do comando `ftable`:
 
 ```{r}
 
 ftable(fair$WAR)
 
 ```
-? poss?vel verificar que 29 casos possuem valor 0 e 3 casos apresentam valor 1
+é possível verificar que 29 casos possuem valor 0 e 3 casos apresentam valor 1
 
 #### Growth
 
-A vari?vel growth cont?m informa??es acerca da varia??o de crescimento do PIB por ano:
+A variável growth contém informações acerca da variação de crescimento do PIB por ano:
 
 ```{r}
 
 fivenum(fair$GROWTH)
 
 ```
-A descri??o por meio do comando fivenum mostra que o valor minimo da distribui??o foi uma contra??o de 14.56 no PIB, enquanto que o 1? quartil apresenta um valor de -1.92, a mediana ? de 2.24, o 3? quartil ? 4.1 e o valor m?ximo da distrbui??o ? de 11.68. Por meio de um histograma ? poss?vel uma melhor visualiza??o da distribui??o.
+A descrição por meio do comando fivenum mostra que o valor minimo da distribuição foi uma contração de 14.56 no PIB, enquanto que o 1º quartil apresenta um valor de -1.92, a mediana é de 2.24, o 3º quartil é 4.1 e o valor máximo da distrbuição é de 11.68. Por meio de um histograma é possível uma melhor visualização da distribuição.
 
 ```{r}
 
 hist(fair$GROWTH)
 
 ```
-Com o histograma, percebemos que boa parte da distribui??o est? localizada no centro, com casos entre -5 e 5. Com um box plot, podemos identificar a presen?a ou n?o de outliers na distribui??o.
+Com o histograma, percebemos que boa parte da distribuição está localizada no centro, com casos entre -5 e 5. Com um box plot, podemos identificar a presença ou não de outliers na distribuição.
 
 ```{r}
 
 boxplot(fair$GROWTH)
 
 ```
-Por meio do Boxplot, podemos verificar que existem dois valores que s?o outliers: -14.55 e -11.46.
+Por meio do Boxplot, podemos verificar que existem dois valores que são outliers: -14.55 e -11.46.
 
 #### Inflation
 
-Vamos verificar as estat?sticas principais da vari?vel inflation:
+Vamos verificar as estatísticas principais da variável inflation:
 
 ```{r}
 
 fivenum(fair$INFLATION)
 ```
-O valor m?nimo da distribui??o ? 0, o 1? quartil ? 1.35, a mediana ? de 2.16, o 3? quartil ? de 3.38 e o valor m?ximo ? de 7.93.
+O valor mínimo da distribuição é 0, o 1º quartil é 1.35, a mediana é de 2.16, o 3º quartil é de 3.38 e o valor máximo é de 7.93.
 
 #### Goodnews
 
-Abaixo vemos os cinco valores da vari?vel goodnews
+Abaixo vemos os cinco valores da variável goodnews
 
 ```{r}
 
 fivenum(fair$GOODNEWS)
 ```
 
-O valor m?nimo da vari?vel ? 0, o 1? quartil ? 3.5, a mediana ? 5, o 3? quartil ? 7.5 e o valor m?ximo ? 10.
+O valor mínimo da variável é 0, o 1º quartil é 3.5, a mediana é 5, o 3º quartil é 7.5 e o valor máximo é 10.
 
 ```{r}
 
 hist(fair$GOODNEWS)
 ```
-O histograma mostra que a distribui??o dos valores ? bem balanceada.
+O histograma mostra que a distribuição dos valores é bem balanceada.
 
-### b) Modelo de regress?o 
+### b) Modelo de regressão 
 
-Para executar o modelo, com a vari?vel Vote como VD e Growth como VI, vamos utilizar o seguinte comando:
+Para executar o modelo, com a variável Vote como VD e Growth como VI, vamos utilizar o seguinte comando:
 
 ```{r}
 
 Linear <- lm(VOTE ~ GROWTH, data = fair)
 summary(Linear)
 ```
-### Resultado da regress?o
+### Resultado da regressão
 
-Como ? poss?vel observar no resultado, a varia??o de uma unidade na VI (Growth) leva a um aumento de 0.65 na VD (Votes). Nesse caso, o modelo de regress?o utilizado ? bivariado, dado a presen?a de apenas duas vari?veis no modelo. 
+Como é possível observar no resultado, a variação de uma unidade na VI (Growth) leva a um aumento de 0.65 na VD (Votes). Nesse caso, o modelo de regressão utilizado é bivariado, dado a presença de apenas duas variáveis no modelo. 
 
-Em rela??o aos res?duos do modelo, o valor m?nimo ? de -8.25, o 1? quartil ? de -3.33, a mediana ? de -0.423, o 3? quartil ? de 3.14 e o valor m?ximo ? de 9.72.
+Em relação aos resíduos do modelo, o valor mínimo é de -8.25, o 1º quartil é de -3.33, a mediana é de -0.423, o 3º quartil é de 3.14 e o valor máximo é de 9.72.
 
 Quando a VI assume o valor de 0, espera-se que o valor da VD seja de 51.86 (Valor do intercepto). J? em rela??o a VI, al?m do valor do coeficiente, o erro padr?o foi de 0.16, o teste-f que testa a hip?tese nula de que n?o h? rela??o entre as vari?veis apresentou um p-valor menor que 0.001. Ou seja, rejeita-se a hip?tese nula de que n?o h? rela??o entre as vari?veis.
 
