@@ -370,10 +370,6 @@ O RMSE é calculado para mensurar a diferença entre os valores preditos pelo mo
 
 ### Comparando o resultados dos modelos
 
-
-```{r, results='hide', message=FALSE, warning=FALSE}
-library('lm.beta')
-```
 ```{r}
 lm.beta(Linear)
 lm.beta(Linear_2)
