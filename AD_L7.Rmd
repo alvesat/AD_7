@@ -16,19 +16,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Este documento apresenta as respostas da lista de exercícios 7 da disciplina de Análise de dados.
 
-O link está dispon?vel no GitHub: https://github.com/alvesat/AD_7
+O link está disponível no GitHub: https://github.com/alvesat/AD_7
 
-A lista envolve a execução de diversos modelos de regressão linear multivariada envolvendo um banco de dados específicos.
+A lista envolve a execução de diversos modelos de regressão linear envolvendo um banco de dados específicos.
 
 ## Questão 1
 
-O primeiro passo para responder a questão é abrir o banco de dados contendo os dados necessários. É importante verificar que os dados estão no formato *.dta*, que é o formato relacionado ao *software* Stata. Devido a isso, teremos que abrir o pacote `haven` e executar o comando para abrir o banco.
+O primeiro passo para responder a questão é abrir o banco de dados contendo as informações necessárias. É importante verificar que os dados estão no formato *.dta*, que é o formato relacionado ao *software* Stata. Devido a isso, teremos que abrir o pacote `haven` e executar o comando para abrir o banco.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(haven)
+```
 
 ```{r}
-library(haven)
-
 fair <- read_dta("~/Dados/Listas/AD_7/DATA_L7/fair.dta") 
-
 ```
 
 ### a) Análise descritiva de todas as variáveis da base de dados
@@ -55,7 +56,7 @@ str(fair)
 
 #### Year
 
-A variável ano apresenta os anos relacionados as outras variáveis. Por meio do comando  `fivenum`, podemos obter um sumário da variável (valores minímos, 1º quartil, mediana, 3º quartil e valor máximo). No caso dessa variável, o importante é verificarmos o começo da análise e o máximo. 
+A variável ano apresenta os anos de cada observação. Por meio do comando  `fivenum`, podemos obter um sumário da variável (valor minímo, 1º quartil, mediana, 3º quartil e valor máximo). No caso dessa variável, o importante é verificarmos o valor inicial e final. 
 
 ```{r}
 
@@ -63,7 +64,7 @@ fivenum(fair$YEAR)
 
 ```
 
-Em relação a variável Year, percebemos que o primeiro ano do banco é 1880 e o ano final do banco é 2004. 
+Em relação a variável Year, percebemos que a primeira observação é em 1880 e a última é em 2004. 
 
 #### Vote
 
@@ -85,7 +86,7 @@ Com o histograma, verificamos que os valores estão mais concentrados entre 45 e
 
 #### Party
 
-A variável party é binária, apresentando como valores -1 e 1. 
+A variável party é dicotômica, apresentando como valores -1 e 1. 
 
 ```{r}
 
@@ -97,7 +98,7 @@ Com o comando `ftable`, podemos fazer uma tabela de frequência da variável par
 
 #### Person
 
-A variável person também é binária, apresentando como valores 1 e 0.
+A variável person também é dicotômica, apresentando como valores 1 e 0.
 
 ```{r}
 
@@ -109,7 +110,7 @@ O resultado mostra que 13 observações apresentam o valor 0 e 19 observações 
 
 #### Duration
 
-A variável duration apresenta os valores de 2 a 0. Com o comando `fivenum`é possível obter uma análise descritiva da varivel:
+A variável duration apresenta os valores de 2 a 0. Com o comando `fivenum` é possível obter uma análise descritiva da varivel:
 
 ```{r}
 
@@ -128,7 +129,7 @@ Pelo histograma, vemos que a maior parte das observções são 0 e 1 (25)
 
 #### War
 
-A variável war é uma variável binária que é melhor observada por meio do comando `ftable`:
+A variável war é uma variável dicotômica que é melhor observada por meio do comando `ftable`:
 
 ```{r}
 
@@ -144,9 +145,9 @@ A variável growth contém informações acerca da variação de crescimento do 
 ```{r}
 
 fivenum(fair$GROWTH)
-
+mean(fair$GROWTH)
 ```
-A descrição por meio do comando fivenum mostra que o valor minimo da distribuição foi uma contração de 14.56 no PIB, enquanto que o 1º quartil apresenta um valor de -1.92, a mediana é de 2.24, o 3º quartil é 4.1 e o valor máximo da distrbuição é de 11.68. Por meio de um histograma é possível uma melhor visualização da distribuição.
+A descrição por meio do comando `fivenum` mostra que o valor minimo da distribuição foi uma contração de 14.56 no PIB, enquanto que o 1º quartil apresenta um valor de -1.92, a mediana é de 2.24, o 3º quartil é 4.1 e o valor máximo da distrbuição é de 11.68. Por meio de um histograma é possível uma melhor visualização da distribuição. A média de variação dO crescimento no período foi de 0.628
 
 ```{r}
 
@@ -160,28 +161,35 @@ Com o histograma, percebemos que boa parte da distribuição está localizada no
 boxplot(fair$GROWTH)
 
 ```
-Por meio do Boxplot, podemos verificar que existem dois valores que são outliers: -14.55 e -11.46.
+Por meio do Boxplot, podemos verificar que existem dois valores que são outliers: -14.55 e -11.46. Ambos resultados de crises econômicas (1920 e 1929)
 
 #### Inflation
 
-Vamos verificar as estatísticas principais da variável inflation:
+Vamos verificar a descrição da variável inflation:
 
 ```{r}
 
 fivenum(fair$INFLATION)
+mean(fair$INFLATION)
 ```
-O valor mínimo da distribuição é 0, o 1º quartil é 1.35, a mediana é de 2.16, o 3º quartil é de 3.38 e o valor máximo é de 7.93.
+O valor mínimo da distribuição é 0, o 1º quartil é 1.35, a mediana é de 2.16, o 3º quartil é de 3.38 e o valor máximo é de 7.93. A média no período foi uma inflação de 2.65.
+
+```{r}
+boxplot(fair$INFLATION)
+```
+O boxplot da variável mostram 3 outliers: 7.92 (em 1980), 7.58 (em 1976) e 7.16 (em 1932)
 
 #### Goodnews
 
-Abaixo vemos os cinco valores da variável goodnews
+Abaixo vemos os cinco valores da variável goodnews, que representa a quantidade de boas notícias no campo da econonomia (no ano observado)
 
 ```{r}
 
 fivenum(fair$GOODNEWS)
+mean(fair$GOODNEWS)
 ```
 
-O valor mínimo da variável é 0, o 1º quartil é 3.5, a mediana é 5, o 3º quartil é 7.5 e o valor máximo é 10.
+O valor mínimo da variável é 0, o 1º quartil é 3.5, a mediana é 5, o 3º quartil é 7.5 e o valor máximo é 10. A média é de 5.28.
 
 ```{r}
 
@@ -204,22 +212,22 @@ Como é possível observar no resultado, a variação de uma unidade na VI (Grow
 
 Em relação aos resíduos do modelo, o valor mínimo é de -8.25, o 1º quartil é de -3.33, a mediana é de -0.423, o 3º quartil é de 3.14 e o valor máximo é de 9.72.
 
-Quando a VI assume o valor de 0, espera-se que o valor da VD seja de 51.86 (Valor do intercepto). J? em rela??o a VI, al?m do valor do coeficiente, o erro padr?o foi de 0.16, o teste-f que testa a hip?tese nula de que n?o h? rela??o entre as vari?veis apresentou um p-valor menor que 0.001. Ou seja, rejeita-se a hip?tese nula de que n?o h? rela??o entre as vari?veis.
+Quando a VI assume o valor de 0, espera-se que o valor da VD seja de 51.86 (Valor do intercepto). Já em relação a VI, além do valor do coeficiente, o erro padrão foi de 0.16 e o teste-f que testa a hipótese nula de que não há relação entre as variáveis apresentou um p-valor menor que 0.001. Ou seja, rejeita-se a hipótese nula de que não há relação entre as variáveis.
 
 ### Capacidade explicativa do modelo
 
-No que se refere a capacidade explicativa do modelo, o R? ajustado foi de 0.33, significando que o modelo consegue explicar 33% da vari?ncia da vari?vel dependente. O erro padr?o do res?duo foi de 4.955. 
+No que se refere a capacidade explicativa do modelo, o R² ajustado foi de 0.33, significando que o modelo consegue explicar 33% da variância da variável dependente. O erro padrão do resíduo foi de 4.955. 
 
 ### Ajuste do modelo
 
-J? no tocante ao ajuste, podemos analisar alguns gr?ficos e verificar a adequabilidade do modelo:
+Já no tocante ao ajuste, podemos analisar alguns gráficos e verificar a adequabilidade do modelo:
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 
 library(ggplot2)
 ```
 
-O gr?fico abaixo apresenta o tamanho do res?duo por meio to tamanho do ponto e cor (quanto mais vermelho mais longe e quanto mais verde menor o res?duo). O tamanho do res?duo ? a distancia entre o ponto e a linha de regress?o. 
+O gráfico abaixo apresenta o tamanho do resíduo por meio do tamanho do ponto e cor (quanto mais vermelho maior e quanto mais verde menor o resíduo). O tamanho do resíduo é a distancia entre o ponto e a linha de regressão. 
 
 ```{r}
 fair$predicted <- predict(Linear)   
@@ -234,62 +242,62 @@ ggplot(fair, aes(x = GROWTH, y = VOTE)) +
   theme_bw()
 ```
 
-Podemos por meio do gr?fico observar a distribui??o dos res?duos do modelo. Por meio do gr?fico de res?duos, ? poss?vel verificar a adequabilidade dos dados. Dado que o res?duo ? aquela parte do modelo que n?o ? explicada, espera-se que este n?o possua nem um padr?o. Em suma, a distribui??o do res?duo deve ser aleat?ria.
+Podemos por meio do gráfico observar a distribuição dos resíduos do modelo. Por meio do gráfico de resíduos, é possível verificar a adequabilidade dos dados. Dado que o resíduo é aquela parte do modelo que não é explicada, espera-se que este não possua nem um padrão. Em suma, a distribuição do resíduo deve ser aleatória.
 
 ```{r}
 plot(Linear, which=1, col=c("blue"))
 ```
 
-Quando observamos o gr?fico, ? poss?vel verificar uma certa concentra??o de observa??es na parte um pouco a direita do centro do gr?fico, o que pode apresentar uma n?o normalidade dos dados. Por isso ser? executado um gr?fico de quantis (quantile-quantile plot). Caso os res?duos sigam uma linha no gr?fico, ? uma boa indica??o de uma distribui??o normal.
+Quando observamos o gráfico, é possível verificar uma certa concentração de observações na parte um pouco a direita do centro do gráfico, o que pode apresentar uma não normalidade dos dados. Por isso será executado um gráfico de quantis (Q-Q). Caso os resíduos sigam a linha de regressão, é uma boa indicação de uma distribuição normal.
 
 ```{r}
 plot(Linear, which=2, col=c("red")) 
 ```
 
-Observa-se que os res?duos seguem a linha da regress?o de maneira bastante alinhada. 
+Observa-se que os resíduos seguem a linha da regressão de maneira bastante alinhada. 
 
-Com base nessas an?lises, ? poss?vel concluir que o modelo ? adequado.
+Com base nessas análises, é possível concluir que o modelo é adequado.
 
-## c) Modelo de regress?o com mais de uma VI
+## c) Modelo de regressão com mais de uma VI
 
-Para executar o modelo de regress?o com VOTES como VD com Growth e Goodnews como VI, executamos o seguinte comando:
+Para executar o modelo de regressão com VOTES como VD e Growth e Goodnews como VI, executamos o seguinte comando:
 
 ```{r}
 Linear_2 <- lm(VOTE ~ GROWTH + GOODNEWS, data = fair)
-summary(Linear)
+summary(Linear_2)
 ```
 ### Resultados do modelo
 
-A vari?vel adicionada ao modelo ? a de GoodNews, relacionada a quantidade de not?cias boas na ?rea economica. 
+A variável adicionada ao modelo é a de GoodNews, relacionada a quantidade de notícias boas na área econômica. 
 
-Ao an?lisar o modelo, percebemos que ambas as vari?veis independentes apresentam um efeito sobre a vari?vel dependente. Entretanto, a vair?vel Growth apresenta um P-valor menor que 0.001 enquanto que a v?riavel Goodnews s? apresenta um efeito significativo sobre a VD quando consideramos um P-valor menor que 0.05. Mesmo assim, ambas as vari?veis est?o abaixo do patamar de 0.05, permitindo rejeitar a hip?tese nula de que n?o h? rela??o entre as vari?veis. Observando o coeficiente da vari?vel Gwroth, podemos interpretar que, o aumento de 1% na varia??o do PIB leva a um aumento de 0.57 na VD (mantendo todo o resto constante). J? em rela??o a GOODNEWS, o aumento em 25% de not?cias economicas positivas, leva ao aumento de 0.71 na VD (mantendo todo o resto constante).
+Ao análisar o modelo, percebemos que ambas as variáveis independentes apresentam um efeito na variável dependente. Entretanto, a variável Growth apresenta um P-valor menor que 0.001 enquanto que a váriavel Goodnews só apresenta um efeito significativo na VD quando consideramos um P-valor menor que 0.05. Mesmo assim, ambas as variáveis estão abaixo do patamar de 0.05, permitindo rejeitar a hipótese nula de que não há relação entre as variáveis. Observando o coeficiente da variável Growth, podemos interpretar que o aumento de 1% na variação do PIB leva a um aumento de 0.57 na VD (mantendo todo o resto constante). Já em relação a GOODNEWS, o aumento em 25% de notícias econômicas positivas, leva ao aumento de 0.71 na VD (mantendo todo o resto constante).
 
-Os valores do res?duo mostram um res?duo m?nimo de -8.3125, com o 1? quartil igual a -3.9191, Mediana de 0.4876, 3? quartil de 3.05 e valor m?ximo de 9.68. 
+Os valores do resíduo mostram um resíduo mínimo de -8.3125, com o 1º quartil igual a -3.9191, Mediana de 0.4876, 3º quartil de 3.05 e valor máximo de 9.68. 
 
 ### Capacidade explicativa do modelo
 
-No que se refere a capacidade explicativa, o modelo apresenta um R? ajustado de 0.43, significando uma explica??o de 43% de varia??o na VD. O erro padr?o do res?duo foi de 4.596.
+No que se refere a capacidade explicativa, o modelo apresenta um R² ajustado de 0.43, significando uma explicação de 43% de variação na VD. O erro padrão do resíduo foi de 4.596.
 
-#### RMSE
+### RMSE
 
-Para analisar o RMSE (Raiz quadrada do erro m?dio) ser? necess?rio primeiro abrir o pacote `sjstats`
+Para analisar o RMSE (Raiz quadrada do erro médio) será necessário primeiro abrir o pacote `sjstats`
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 library("sjstats")
 ```
 
-Assim ? poss?vel verificar o valor da RMSE:
+Assim é possível verificar o valor da RMSE:
 
 ```{r}
-rmse(Linear)
+rmse(Linear_2)
 ```
-O RMSE ? calculado para mensurar a diferen?a entre os valores preditos pelo modelo e os valores observados. Tamb?m ? conhecido como erro padr?o do modelo e ? calculado elevando ao quadrado cada erro do modelo, somando-os, dividindo pelo n?mero de casos e obtendo a raiz quadrada. Nesse caso, o valor obtido foi de 4.37.O RMSE tem a mesma unidade que a VD e quanto menor, melhor.
+O RMSE é calculado para mensurar a diferença entre os valores preditos pelo modelo e os valores observados. Também é conhecido como erro padrão do modelo e é calculado elevando ao quadrado cada erro do modelo, somando-os, dividindo pelo número de casos e obtendo a raiz quadrada. Nesse caso, o valor obtido foi de 4.37.O RMSE tem a mesma unidade que a VD e quanto menor, melhor.
 
-### Comparando resultados dos modelos
+### Comparando o resultados dos modelos
 
-Para poder comparar os resultados desse modelo com o anterior, ? necess?rio padronizar os coeficientes de ambos os modelos. Para isso ser? utilizado o pacote `lm.beta`:
+Para poder comparar os resultados desse modelo com o anterior, é necessário padronizar os coeficientes de ambos os modelos. Para isso será utilizado o pacote `lm.beta`:
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 library('lm.beta')
 ```
 ```{r}
@@ -297,25 +305,31 @@ lm.beta(Linear)
 lm.beta(Linear_2)
 ```
 
-Por meio dos coeficientes padronizados, ? poss?vel comparar os modelos. No primeiro modelo executado, verifica-se que para o aumento de 1 desvio padr?o da VI Growth, espera-se o aumento de .60 desvio padr?o na VD. 
+Por meio dos coeficientes padronizados, é possível comparar os modelos. No primeiro modelo executado, verifica-se que para o aumento de 1 desvio padrão da VI Growth, espera-se o aumento de .60 desvio padrão na VD. 
 
-J? no segundo modelo, o aumento de 1 desvio padr?o da VI Growth leva a um aumento de 0.52 desvio padr?o na VD. Ou seja, houve uma redu??o no efeito da VI Growth do modelo 1 para o modelo 2. 
+Já no segundo modelo, o aumento de 1 desvio padrão da VI Growth leva a um aumento de 0.52 desvio padrão na VD. Ou seja, houve uma redução no efeito da VI Growth do modelo 1 para o modelo 2. 
 
-#### Ajuste do modelo
+```{r}
+confint(Linear_2)
+```
 
-Para verificar o ajuste do modelo, ser? analisado os residuos graficamente.
+Já o intervalo de confiança apresenta o intervalo para cada coeficiente do modelo. Na VI Growth, o valor mínimo é 0.26 e máx é 0.88, na VÍ Goodnews o valor vai de 0.11 a 1.32.
+
+### Ajuste do modelo
+
+Para verificar o ajuste do modelo,  os resíduos serão analisados graficamente.
 
 ```{r}
 plot(Linear_2, which=2, col=c("red")) 
 ```
-O gr?fico Q-Q mostra um ajuste adequado do modelo dado a tend?ncia dos pontos em rela??o a linha de regress?o.
+O gáfico Q-Q mostra um ajuste adequado do modelo dado a tendência dos pontos em relação a linha de regressão.
 
 ```{r}
 plot(Linear_2, which=1, col=c("blue"))
 ```
-J? o gr?fico dos res?duos apresenta valores tanto acima quanto abaixo da linha, representando tamb?m um bom ajuste do modelo.
+Já o gráfico dos resíduos apresenta valores tanto acima quanto abaixo da linha, representando também um bom ajuste do modelo.
 
-Por fim, o teste de Shapiro permite verificar a normalidade da distribui??o:
+Por fim, o teste de Shapiro permite verificar a normalidade da distribuição:
 
 ```{r}
 res <- residuals(Linear_2)
@@ -325,4 +339,102 @@ shapiro.test(res)
 mean(res)
 
 ```
-Os resultados do teste apontam um p-valor de 0.76, levando a n?o rejeitar a hip?tese nula de que os dados testados n?o est?o normalmente distribu?dos. A média dos resíduos obtida foi de 4.27. Dado os gráficos analisados e teste realizado, é possível concluir que há homocedasticidade no modelo.
+Os resultados do teste apontam um p-valor de 0.76, levando a não rejeitar a hipótese nula de que os dados testados não estão normalmente distribuídos. A média dos resíduos obtida foi de 4.27. Dado os gráficos analisados e teste realizado, é possível concluir que há homocedasticidade no modelo.
+
+## d) Modelo de regressão com a VI War
+
+Para executar o modelo de regressão com VOTES como VD e com Growth, Goodnews e War como VI, executamos o seguinte comando:
+
+```{r}
+Linear_3 <- lm(VOTE ~ GROWTH + GOODNEWS + WAR, data = fair)
+summary(Linear_3)
+```
+### Resultados do modelo
+
+A variável adicionada ao modelo é a de War, uma variável dicotômica que indica que se naquele ano o país estava em guerra ou não.
+
+Ao análisar o modelo, percebemos que apenas a variável Growth tem efeito sobre a VD. Ao observar o P-valor dos coeficientes, o P-valor de Growth é menor que 0.001 enquanto que os coeficientes de Goodnews e War passam do limiar de 0.05, não sendo assim possível rejeitar a hipótese nula de que não existe relação entre as variáveis. Observando o coeficiente da variável Gwroth, podemos interpretar que, o aumento de 1% na variação do PIB leva a um aumento de 0.57 na VD (mantendo todo o resto constante). Os coeficientes da variável Goodnews e War são 0.73 e 0.17 respectivamente.
+
+Os valores do resíduo mostram um resíduo mínimo de -8.3043, com o 1º quartil igual a -3.9080, Mediana de 0.5065, 3º quartil de 3.0190 e valor máximo de 9.70. 
+
+### Capacidade explicativa do modelo
+
+No que se refere a capacidade explicativa, o modelo apresenta um R² ajustado de 0.40, significando uma explicação de 40% de variação na VD. O erro padrão do resíduo foi de 4.677.
+
+### RMSE
+
+```{r}
+rmse(Linear_3)
+```
+O RMSE é calculado para mensurar a diferença entre os valores preditos pelo modelo e os valores observados. Também é conhecido como erro padrão do modelo e é calculado elevando ao quadrado cada erro do modelo, somando-os, dividindo pelo número de casos e obtendo a raiz quadrada. Nesse caso, o valor obtido foi de 4.37.O RMSE tem a mesma unidade que a VD e quanto menor, melhor.
+
+### Comparando o resultados dos modelos
+
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library('lm.beta')
+```
+```{r}
+lm.beta(Linear)
+lm.beta(Linear_2)
+lm.beta(Linear_3)
+```
+
+Por meio dos coeficientes padronizados, é possível comparar os modelos. No primeiro modelo executado, verifica-se que para o aumento de 1 desvio padrão da VI Growth, espera-se o aumento de .60 desvio padrão na VD. 
+
+Já no segundo modelo, o aumento de 1 desvio padrão da VI Growth leva a um aumento de 0.52 desvio padrão na VD. Ou seja, houve uma redução no efeito da VI Growth do modelo 1 para o modelo 2. 
+
+No terceiro modelo, o valor do coeficiente padronizado da VI Growth permanece o mesmo, enquanto que em relação a VI Goodnews, no terceiro modelo há um aumento de 0.01 no coeficiente. Entretanto, no terceiro modelo a VI Goodnews não possui um efeito significativo. Já a variável War apresenta um coeficiente padronizado menor que 0.
+
+Comparando os três modelos, percebemos que a variável que mais explica a variação na VD é Growth.
+
+
+```{r}
+confint(Linear_3)
+```
+
+Já o intervalo de confiança apresenta o intervalo para cada coeficiente do modelo. Na VI Growth, o valor mínimo é 0.25 e máx é 0.89, na VÍ Goodnews o valor vai de -0.04 a 1.50 e na VI War os valores são -7.13 de mínimo e 7.47 de máximo.
+
+
+### Ajuste do modelo
+
+Para verificar o ajuste do modelo,  os resíduos serão analisados graficamente.
+
+```{r}
+plot(Linear_3, which=2, col=c("red")) 
+```
+O gáfico Q-Q mostra um ajuste adequado do modelo dado a tendência dos pontos em relação a linha de regressão.
+
+```{r}
+plot(Linear_3, which=1, col=c("blue"))
+```
+Já o gráfico dos resíduos apresenta valores tanto acima quanto abaixo da linha, representando também um bom ajuste do modelo.
+
+Por fim, o teste de Shapiro permite verificar a normalidade da distribuição:
+
+```{r}
+res <- residuals(Linear_3)
+
+shapiro.test(res)
+
+mean(res)
+
+```
+Os resultados do teste apontam um p-valor de 0.75, levando a não rejeitar a hipótese nula de que os dados testados não estão normalmente distribuídos. A média dos resíduos obtida foi de 3.30. Dado os gráficos analisados e o teste realizado, é possível concluir que há homocedasticidade no modelo.
+
+## Questão 2
+
+### Citação do artigo
+
+BATISTA, Mariana. Who Gets What and How Does It Matter? Importance-Weighted Portfolio Allocation and Coalition Support in Brazil. *Journal of Politics in Latin America*, v. 10, n. 3, p. 99-134, 2018.
+
+### Modelo
+
+A variável dependente do modelo é disciplina partidária. O que a autora busca analisar é como a alocação de ministérios importa para o apoio legislativo dos parceiros de coalização no sistema presidencialista brasieiro. Na tabela 4 do artigo, são apresentados 4 modelos de regressão linear tendo como VD a variável de displina partidária. O objetivo é verificar o  efeito da alocação do ministério na disciplina partidária. Por meio do modelo, é possível verificar os fatores que levam a maior disciplina partidária e qual o papel que a alocação dos ministérios tem sobre a VD.
+
+No modelo I, as VIs do modelo são: Distância Ideológica, Dimensão política do ministério, Segundo mandato, Tempo até a eleição e Popularidade. Ao verificar os resultados dos coeficientes, apenas os efeitos da VI de distância ideológica e Tempo até a eleiçaõ apresentam um P-valor meor que 0.01 enquanto que Segundo mandato e popularidade são significativos apenas com um P-valor menor que 0.1 e Dimensão Política do MIn. não apresenta um P-valor significativo.
+
+Em relação aos coeficientes, o da VI Distância Ideológica é de -10.131 (aumento de 1 unidade leva a redução de -10.131 na VD), Dimensão política do ministério é 8.341 (aumento de 1 unidade leva a aumento de 8.341 na VD), Segundo mandato é 3.439 (aumento de 1 unidade leva a aumento de 3.439 na VD), Tempo ate a eleição 4.456 (aumento de 1 unidade leva a aumento de 4.456 na VD) e Popularidade 0.139 (aumento de 1 unidade leva a aumento de 0.139). A constante tem um coeficiente de 65.685. 
+
+O R² do modelo é de 0.335. Ou seja, 33% da variação da VD é explicada pela VI e o erro padrão do resíduo é de 9.344.
+
